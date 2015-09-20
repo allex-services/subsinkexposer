@@ -1,0 +1,21 @@
+{
+  "name": "allex_subsinkexposerservice",
+  "version": "0.1.0",
+  "description": "SubSinkExposerService",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.hers.rs:allex_services/subsinkexposer.git"
+  },
+  "keywords": [
+    "ecosystem:allex",
+    "Service",
+    "SubSinkExposer"
+  ],
+  "author": "HERS Belgrade",
+  "license": "ISC"
+}
+
