@@ -10,13 +10,43 @@ function createSubSinkExposerService(execlib, ParentServicePack) {
   }
 
   function SubSinkExposerService(prophash) {
+    this.parentSink = prophash.parentsink;
+    this.subSinkName = prophash.subsinkname;
     ParentService.call(this, prophash);
+    this.parentSinkDestroyedListener = this.parentSink.destroyed.attach(this.close.bind(this));
   }
   
   ParentService.inherit(SubSinkExposerService, factoryCreator);
   
   SubSinkExposerService.prototype.__cleanUp = function() {
+    if (this.parentSinkDestroyedListener) {
+      this.parentSinkDestroyedListener.destroy();
+    }
+    this.parentSinkDestroyedListener = null;
+    this.subSinkName = null;
+    this.parentSink = null;
     ParentService.prototype.__cleanUp.call(this);
+  };
+
+  SubSinkExposerService.prototype.obtainOuterSink = function () {
+    this.parentSink.subConnect(this.subSinkName, {name: 'user'}, {nochannels: true}).then(
+      this.setOuterSink.bind(this),
+      this.close.bind(this)
+    );
+  };
+
+  SubSinkExposerService.prototype.onOOBData = function (item) {
+    console.log(this.subSinkName, 'says', item);
+    ParentService.prototype.onOOBData.call(this, item);
+  };
+
+  SubSinkExposerService.prototype.propertyHashDescriptor = {
+    parentsink: {
+      type: 'object'
+    },
+    subsinkname: {
+      type: 'string'
+    }
   };
   
   return SubSinkExposerService;
