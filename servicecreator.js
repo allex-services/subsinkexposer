@@ -35,11 +35,6 @@ function createSubSinkExposerService(execlib, ParentServicePack) {
     );
   };
 
-  SubSinkExposerService.prototype.onOOBData = function (item) {
-    console.log(this.subSinkName, 'says', item);
-    ParentService.prototype.onOOBData.call(this, item);
-  };
-
   SubSinkExposerService.prototype.propertyHashDescriptor = {
     parentsink: {
       type: 'object'
