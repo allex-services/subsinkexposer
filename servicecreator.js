@@ -29,7 +29,7 @@ function createSubSinkExposerService(execlib, ParentServicePack) {
   };
 
   SubSinkExposerService.prototype.obtainOuterSink = function () {
-    this.parentSink.subConnect(this.subSinkName, {name: 'user'}, {nochannels: true}).then(
+    this.parentSink.subConnect(this.subSinkName, {name: 'subsinkexposing_requester_user'}, {nochannels: true}).then(
       this.setOuterSink.bind(this),
       this.close.bind(this)
     );
