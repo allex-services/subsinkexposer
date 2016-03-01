@@ -13,7 +13,7 @@ function createSubSinkExposerService(execlib, ParentServicePack) {
     this.parentSink = prophash.parentsink;
     this.subSinkName = prophash.subsinkname;
     ParentService.call(this, prophash);
-    this.parentSinkDestroyedListener = this.parentSink.destroyed.attach(this.close.bind(this));
+    this.parentSinkDestroyedListener = null;
     this.supersink = null;
   }
   
@@ -32,6 +32,11 @@ function createSubSinkExposerService(execlib, ParentServicePack) {
 
   SubSinkExposerService.prototype.onSuperSink = function (supersink) {
     this.supersink = supersink;
+    if (this.parentSink && this.parentSink.destroyed) {
+      this.parentSinkDestroyedListener = this.parentSink.destroyed.attach(this.close.bind(this));
+    } else {
+      this.supersink.destroy();
+    }
   };
 
   SubSinkExposerService.prototype.obtainOuterSink = function () {
