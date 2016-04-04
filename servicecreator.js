@@ -1,6 +1,7 @@
 function createSubSinkExposerService(execlib, ParentServicePack) {
   'use strict';
-  var ParentService = ParentServicePack.Service;
+  var ParentService = ParentServicePack.Service,
+    lib = execlib.lib;
 
   function factoryCreator(parentFactory) {
     return {
@@ -40,7 +41,19 @@ function createSubSinkExposerService(execlib, ParentServicePack) {
   };
 
   SubSinkExposerService.prototype.obtainOuterSink = function () {
-    this.parentSink.subConnect(this.subSinkName, {name: 'subsinkexposing_requester_user'}, {nochannels: true}).then(
+    var sinkinfo = lib.arryOperations.findElementWithProperty(this.parentSink.remoteSinkNames, 'name', this.subSinkName),
+      identity;
+    if (sinkinfo) {
+      if (sinkinfo.role) {
+        identity = {name: 'subsinkexposing_requester_user', role: sinkinfo.role};
+      } else if (sinkinfo.identity) {
+        identity = sinkinfo.identity;
+      }
+    }
+    if (!identity) {
+      identity = {name: 'subsinkexposing_requester_user'};
+    }
+    this.parentSink.subConnect(this.subSinkName, identity, {nochannels: true}).then(
       this.setOuterSink.bind(this),
       this.close.bind(this)
     );
