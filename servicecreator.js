@@ -31,6 +31,10 @@ function createSubSinkExposerService(execlib, ParentServicePack) {
     ParentService.prototype.__cleanUp.call(this);
   };
 
+  SubSinkExposerService.prototype.isInitiallyReady = function () {
+    return false;
+  };
+
   SubSinkExposerService.prototype.onSuperSink = function (supersink) {
     this.supersink = supersink;
     if (this.parentSink && this.parentSink.destroyed) {
@@ -38,6 +42,11 @@ function createSubSinkExposerService(execlib, ParentServicePack) {
     } else {
       this.supersink.destroy();
     }
+  };
+
+  SubSinkExposerService.prototype.finalizeSetOuterSink = function (sink) {
+    ParentService.prototype.finalizeSetOuterSink.call(this, sink);
+    this.readyToAcceptUsersDefer.resolve(true);
   };
 
   SubSinkExposerService.prototype.obtainOuterSink = function () {
