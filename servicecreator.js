@@ -1,7 +1,6 @@
-function createSubSinkExposerService(execlib, ParentServicePack) {
+function createSubSinkExposerService(execlib, ParentService) {
   'use strict';
-  var ParentService = ParentServicePack.Service,
-    lib = execlib.lib;
+  var lib = execlib.lib;
 
   function factoryCreator(parentFactory) {
     return {
