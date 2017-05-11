@@ -1,6 +1,8 @@
+var arrayoperationscreator = require('allex_arrayoperationslowlevellib');
 function createSubSinkExposerService(execlib, ParentService) {
   'use strict';
-  var lib = execlib.lib;
+  var lib = execlib.lib,
+    arrayOperations = arrayoperationscreator(lib.extend, lib.readPropertyFromDotDelimitedString, lib.isFunction, lib.Map, lib.AllexJSONizingError);
 
   function factoryCreator(parentFactory) {
     return {
@@ -49,7 +51,7 @@ function createSubSinkExposerService(execlib, ParentService) {
   };
 
   SubSinkExposerService.prototype.obtainOuterSink = function () {
-    var sinkinfo = lib.arryOperations.findElementWithProperty(this.parentSink.remoteSinkNames, 'name', this.subSinkName),
+    var sinkinfo = arrayOperations.findElementWithProperty(this.parentSink.remoteSinkNames, 'name', this.subSinkName),
       identity;
     if (sinkinfo) {
       if (sinkinfo.role) {
